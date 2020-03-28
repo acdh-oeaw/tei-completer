@@ -126,7 +126,8 @@ public class XmlConfiguration<T extends AutoComplete> implements Configuration<T
                     dependent,
                     autoComplete.getSelection(),
                     requestInfo,
-                    responseAction
+                    responseAction,
+                    autoComplete.isSwapValueAndDescription()
             ));
         }
 

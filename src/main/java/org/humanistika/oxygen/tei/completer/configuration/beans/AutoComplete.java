@@ -39,8 +39,9 @@ public class AutoComplete {
     private final String selection;
     private final RequestInfo requestInfo;
     @Nullable private final ResponseAction responseAction;
+    private final boolean swapValueAndDescription;
 
-    public AutoComplete(final Map<String, String> namespaceBindings, final String context, final String attribute, final Dependent dependent, final String selection, final RequestInfo requestInfo, final ResponseAction responseAction) {
+    public AutoComplete(final Map<String, String> namespaceBindings, final String context, final String attribute, final Dependent dependent, final String selection, final RequestInfo requestInfo, final ResponseAction responseAction, final boolean swapValueAndDescription) {
         this.namespaceBindings = namespaceBindings;
         this.context = context;
         this.attribute = attribute;
@@ -48,6 +49,7 @@ public class AutoComplete {
         this.selection = selection;
         this.requestInfo = requestInfo;
         this.responseAction = responseAction;
+        this.swapValueAndDescription = swapValueAndDescription;
     }
 
     public Map<String, String> getNamespaceBindings() {
@@ -79,4 +81,6 @@ public class AutoComplete {
     public ResponseAction getResponseAction() {
         return responseAction;
     }
+
+    public boolean isSwapValueAndDescription() { return this.swapValueAndDescription; }
 }

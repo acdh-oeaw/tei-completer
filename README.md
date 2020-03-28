@@ -1,5 +1,5 @@
-# TEI Completer
-[![Build Status](https://travis-ci.org/BCDH/TEI-Completer.png?branch=master)](https://travis-ci.org/BCDH/TEI-Completer) [![Java 8+](https://img.shields.io/badge/java-8+-4c7e9f.svg)](http://java.oracle.com) [![License GPL 2](https://img.shields.io/badge/license-GPL%202-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html) [![Download](https://img.shields.io/badge/download-version%201.1-ff69b4.svg)](http://search.maven.org/remotecontent?filepath=org/humanistika/oxygen/tei-completer/1.1/tei-completer-1.1-oxygen-plugin.jar)
+# TEI Completer - With option for exchanging value and description
+[![Build Status](https://travis-ci.org/tklampfl/TEI-Completer.png?branch=master)](https://travis-ci.org/tklampfl/TEI-Completer) [![Java 8+](https://img.shields.io/badge/java-8+-4c7e9f.svg)](http://java.oracle.com) [![License GPL 2](https://img.shields.io/badge/license-GPL%202-blue.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 The TEI Completer is a highly customizable plugin for setting up and activating remote-driven autocompletions of attribute values in the [oXygen XML Editor](http://www.oxygenxml.com).  
 
@@ -14,6 +14,7 @@ With the TEI Completer, you can:
 - use basic or digest HTTP authentication, should you need it
 - accept either XML or JSON-formatted responses from the server
 - optionally transform server responses with XSL or JavaScript to the format required by the plugin
+- switch between showing the values or the descriptions while always inserting the value
 
 The plugin will communicate with your server(s) and provide autocomplete suggestions based on the values in your context element(s) — all this from the comfort of your favorite XML editor. 
 
@@ -24,7 +25,7 @@ The plugin has been developed at the [Belgrade Center for Digital Humanities](ht
 
 # Installation
 
-1. Download the precompiled binary of the TEI Completer from [here](http://search.maven.org/remotecontent?filepath=org/humanistika/oxygen/tei-completer/1.1/tei-completer-1.1-oxygen-plugin.jar) or [build from source](#building).
+1. Download the precompiled binary of the TEI Completer from the `target` folder or [build from source](#building).
 
 2. Copy the file `tei-completer-1.1-oxygen-plugin.jar` to `$OXYGEN_HOME/frameworks/tei`.
 
@@ -47,7 +48,7 @@ default locations for Oxygen:
 
 7. Scroll down and select the `TEI P5` Document Type Association. 
 
-	![alt text](https://raw.githubusercontent.com/BCDH/TEI-Completer/master/doc/images/oxygen-document-type-associations-tei-p5.jpg "Oxygen Document Type Associations")
+	![alt text](doc/images/oxygen-document-type-associations-tei-p5.jpg "Oxygen Document Type Associations")
 
 8. Click the *Edit* button under the list of Document Type Associations
 
@@ -55,20 +56,20 @@ default locations for Oxygen:
 
 10. In the dialog box *Add resources to the classpath*, enter the following text `${framework}/tei-completer-1.1-oxygen-plugin.jar`, and then click the *OK* button.
 
-	![alt text](https://raw.githubusercontent.com/BCDH/TEI-Completer/master/doc/images/oxygen-edit-tei-p5-document-type-association.jpg "Editing the TEI P5 framework classpath")
+	![alt text](doc/images/oxygen-edit-tei-p5-document-type-association.jpg "Editing the TEI P5 framework classpath")
 
 11. Select the *Extensions* tab, and then click the *Choose* button beside the entry for *Content completion handler*.
 
 12. Select the `TEI Completer - org.humanistika.oxygen.tei.completer` plugin, and then click the *OK* button. 
 
-	![alt text](https://raw.githubusercontent.com/BCDH/TEI-Completer/master/doc/images/oxygen-edit-tei-p5-content-completion-handler.jpg "Editing the TEI P5 Content completion handler")
+	![alt text](doc/images/oxygen-edit-tei-p5-content-completion-handler.jpg "Editing the TEI P5 Content completion handler")
 
 13. Click the *OK* button to leave the TEI P5 Document Type association dialog, click the *OK* button again to leave the Oxygen Preferences dialog.
 
 
 # Configuring
 
-The TEI Completer uses an XML configuration file whoose syntax is documented in the XML Schema [config.xsd](https://raw.githubusercontent.com/BCDH/TEI-Completer/master/src/main/resources/config.xsd).
+The TEI Completer uses an XML configuration file whoose syntax is documented in the XML Schema [config.xsd](src/main/resources/config.xsd).
 
 The XML file must be named `config.xml` and placed in a folder named `.bcdh-tei-completer` in your user profile. The
 following are the known locations for the config file:
@@ -103,11 +104,20 @@ A sample `config.xml` which requests auto-completion suggestions for all `//w/@l
         <response>
             <transformation>getLemmaOutput.xslt</transformation>
         </response>
+        <swapValueAndDescription>true</swapValueAndDescription>
     </autoComplete>
 </config>
 ```
 
 If you wish to use a response transformation, these must be written in either XSLT (1.0 or 2.0) or JavaScript (<=1.8). The transformation file must be resolved relative to `config.xml`, that is to say that you should place your transforms in the same folder as `config.xml` (see above). See the [Response Transformations](#response-transformations) section for further details.
+
+Setting `swapValueAndDescription` to `true` delivers the following result:
+
+![alt text](doc/images/screenshot_with_swaping.png "Description shown in autocomplete")
+
+Setting `swapValueAndDescription` to `false` gives the following results:
+
+![alt text](doc/images/screenshot_without_swaping.png "Values shown in autocomplete")
 
 ***NOTE*** Changes to the configuration require restarting Oxygen to be detected.
 
@@ -115,7 +125,7 @@ If you wish to use a response transformation, these must be written in either XS
 # Server Messages
 
 Servers are expected to respond to the plugin using an XML or JSON document, which contains the suggestions for
-auto-completion. The XML format is documented in [suggestions.xsd](https://raw.githubusercontent.com/BCDH/TEI-Completer/master/src/main/resources/suggestions.xsd).
+auto-completion. The XML format is documented in [suggestions.xsd](src/main/resources/suggestions.xsd).
 The JSON format is a direct conversion of the XML format.
 
 However, if your server already has a fixed format, you may use a [Response Transformation](#response-transformations) to transform the response from your server to that shown below.
@@ -216,7 +226,7 @@ function transform(content) {
 * Requirements: Git, Apache Maven 3, Java JDK 8
 
 ```bash
-$ git clone https://github.com/BCDH/TEI-Completer.git
+$ git clone https://github.com/tklampfl/TEI-Completer.git
 $ cd TEI-Completer.git
 $ mvn package
 ```

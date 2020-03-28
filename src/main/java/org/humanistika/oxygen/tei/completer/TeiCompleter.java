@@ -135,7 +135,12 @@ public class TeiCompleter implements SchemaManagerFilter {
         final Suggestions suggestions = getClient(authenticationType).getSuggestions(autoComplete.getRequestInfo(), selection, dependent, autoComplete.getResponseAction());
         final List<CIValue> results = new ArrayList<>();
         for(final Suggestion suggestion : suggestions.getSuggestion()) {
-            results.add(new CIValue(suggestion.getValue(), suggestion.getDescription()));
+            if(autoComplete.isSwapValueAndDescription()){
+                results.add(new CIValue(suggestion.getDescription(), false, suggestion.getValue(), suggestion.getValue(), CIValue.TYPE_PLAIN));
+            }
+            else {
+                results.add(new CIValue(suggestion.getValue(), suggestion.getDescription()));
+            }
         }
         return results;
 

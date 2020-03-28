@@ -58,6 +58,11 @@
             <xs:documentation>Optional configuration of steps to perform on the response.</xs:documentation>
           </xs:annotation>
         </xs:element>
+        <xs:element name="swapValueAndDescription" minOccurs="1" maxOccurs="1" type="xs:boolean">
+          <xs:annotation>
+            <xs:documentation>Flag to indicate that the auto completion values and description should be exchanged.</xs:documentation>
+          </xs:annotation>
+        </xs:element>
       </xs:sequence>
     </xs:complexType>
   </xs:element>
